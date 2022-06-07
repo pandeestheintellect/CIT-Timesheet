@@ -1,0 +1,63 @@
+﻿@model Eng360Web.Models.ViewModel.UserViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="inner-page--container view">
+
+    <div class="modal-footer">
+        @*<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>*@
+        <input type="button" value="Back" id="create-user-dialog-save" class="btn btn-primary Users" />
+
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            User Details
+        </div>
+
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="modal-body">
+
+                <table class="table table-bordered">
+                    <tr>
+                        <th bgcolor="beige" class="col-md-7">@Html.LabelFor(model => model.UserID) </th>
+                        <th bgcolor="beige" class="col-md-7">@Html.DisplayNameFor(model => model.DisplayName) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.UserID)</td>
+                        <td>@Html.DisplayFor(model => model.DisplayName)</td>
+
+                    </tr>
+
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.UserName) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.GroupID) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.UserName)</td>
+                        <td>@Html.DisplayFor(model => model.GroupID)</td>
+
+                    </tr>
+
+
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        @*<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>*@
+        <input type="button" value="Back" id="create-leve-dialog-save" class="btn btn-primary LeaveSettings" />
+
+    </div>
+
+</div>

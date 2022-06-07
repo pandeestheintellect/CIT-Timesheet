@@ -1,0 +1,123 @@
+﻿@model IEnumerable<Eng360Web.Models.ViewModel.ProjectPermissionViewModel>
+
+@{
+    Layout = null;
+}
+
+
+
+<div class="row inner-page--container">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <b>   Project Permission Setup </b>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+
+                @{
+                    var n = 0;
+                    var x = Model.Count();
+
+                    string[] modlist = new string[x];
+                    foreach (var tst in Model)
+                    {
+                        modlist[n] = tst.EmployeeID.ToString();
+                        n++;
+                    }
+                    ViewBag.modlist = modlist;
+
+                }
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        &nbsp;
+                    </div>
+
+                    <div class="col-lg-4">
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                @Html.Label("Project Name", htmlAttributes: new { @class = "control-label" })
+                                <div>
+                                    @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "form-control", @onchange = "ShowProjectMenu(this.value)" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div>&nbsp;</div>
+                        </div>
+
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+
+                                    <th style="text-align: center">
+                                        Employee Name
+                                    </th>
+
+                                    <th style="text-align: center">Set Permission</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @for (int i = 0; i < ViewBag.EmployeeList.Count; i++)
+                                {
+
+                                    var checkBoxId = "EmployeeId_" + ViewBag.EmployeeList[i].Value;
+
+
+                                    <tr>
+                                        <td>
+                                            @ViewBag.EmployeeList[i].Text
+                                        </td>
+                                        <td align="center">
+                                            <input type="checkbox" id="@checkBoxId" class="chkclass" value="@ViewBag.EmployeeList[i].Value" />
+
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="col-lg-4">
+                        &nbsp;
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" id="create-projectmenu-dialog-save" class="btn btn-primary">Save</button>
+
+            </div>
+        </div>
+        
+
+    </div>
+</div>
+
+<script>
+    var actmon = "";
+    var mod = @Html.Raw(Json.Encode(ViewBag.modlist));
+
+    $(document).ready(function () {
+
+        $.each(mod, function (index, value) {
+           
+            //console.log(value);
+            if (value != null) {
+               
+                $('#EmployeeId_'+value).prop('checked', true);
+               
+            }
+        });
+    });
+
+</script>

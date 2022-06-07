@@ -1,0 +1,132 @@
+﻿@model Eng360Web.Models.ViewModel.ProjectNewViewModel
+
+    @{
+        Layout = null;
+    }
+
+<div class="inner-page--container view">
+
+    <div class="modal-footer">
+        @*<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>*@
+        <input type="button" value="Back" id="create-prjectnew-dialog-save" class="btn btn-primary ProjectNew" />
+
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Project Details
+        </div>
+
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="modal-body">
+
+                <table class="table table-bordered">
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.ProjectName) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model =>model.eng_client_master.Company_Name) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.ProjectName)</td>
+                        <td>@Html.DisplayFor(model =>model.eng_client_master.Company_Name)</td>
+
+                    </tr>
+
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.StartDate) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.EndDate) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @{
+                            var stdt = Convert.ToDateTime(Model.StartDate).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.StartDate != null)
+                            {
+                            @stdt
+                            }
+                        </td>
+                        <td>
+                            @{
+                            var eddt = Convert.ToDateTime(Model.EndDate).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.EndDate != null)
+                            {
+                            @eddt
+                            }
+                        </td>
+                       
+                    </tr>
+
+
+
+
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.CreatedDate) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.CreatedBy) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @{
+                            var crdt = Convert.ToDateTime(Model.CreatedDate).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.CreatedDate != null)
+                            {
+                            @crdt
+                            }
+                        </td>
+                       
+                        <td>@Html.DisplayFor(model => model.eng_employee_profile2.FullName)</td>
+
+                    </tr>
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.UpdatedBy) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.UpdatedDate) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.eng_employee_profile1.FullName)</td>
+                        <td>
+                            @{
+                            var updt = Convert.ToDateTime(Model.UpdatedDate).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.UpdatedDate != null)
+                            {
+                            @updt
+                            }
+                        </td>
+                       
+                    </tr>
+
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.ProjectLeader) </th>
+
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.eng_employee_profile.FirstName)
+                        @Html.DisplayFor(model => model.eng_employee_profile.LastName)</td>
+
+
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        @*<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>*@
+        <input type="button" value="Back" id="create-prjectnew-dialog-save" class="btn btn-primary ProjectNew" />
+
+    </div>
+
+</div>

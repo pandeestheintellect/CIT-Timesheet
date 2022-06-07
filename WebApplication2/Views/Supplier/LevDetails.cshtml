@@ -1,0 +1,103 @@
+﻿@model Eng360Web.Models.ViewModel.LeaveSettingViewModel
+
+    @{
+        Layout = null;
+    }
+
+<div class="inner-page--container view">
+
+    <div class="modal-footer">
+      
+        <input type="button" value="Back" id="create-leve-dialog-save" class="btn btn-primary LeaveSettings" />
+
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Leave Setting Details
+        </div>
+
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="modal-body">
+
+                <table class="table table-bordered">
+                    <tr>
+                        <th bgcolor="beige" class="col-md-7">@Html.LabelFor(model => model.LeaveName) </th>
+                        <th bgcolor="beige" class="col-md-7">@Html.DisplayNameFor(model => model.Days) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.LeaveName)</td>
+                        <td>@Html.DisplayFor(model => model.Days)</td>
+
+                    </tr>
+
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.Remarks) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.LeaveDescription) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.Remarks)</td>
+                        <td>@Html.DisplayFor(model => model.LeaveDescription)</td>
+
+                    </tr>
+
+
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.CreatedDate) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.CreatedBy) </th>
+                       
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @{
+                             var crdt = Convert.ToDateTime(Model.CreatedDate).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.CreatedDate != null)
+                            {
+                            @crdt
+                            }
+                        </td>
+                       
+                        <td>@Html.DisplayFor(model => model.eng_employee_profile1.FullName)</td>
+
+                    </tr>
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.UpdatedBy) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.UpdatedDate) </th>
+                       
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.eng_employee_profile.FullName)</td>
+                        <td>
+                            @{
+                            var updt = Convert.ToDateTime(Model.UpdatedDate).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.UpdatedDate != null)
+                            {
+                            @updt
+                            }
+                        </td>
+
+                    </tr>
+
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        @*<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>*@
+        <input type="button" value="Back" id="create-leve-dialog-save" class="btn btn-primary LeaveSettings" />
+
+    </div>
+
+  </div>

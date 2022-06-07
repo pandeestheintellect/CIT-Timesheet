@@ -1,0 +1,674 @@
+﻿@model Eng360Web.Models.ViewModel.TimeEntryMasterViewModel
+
+
+@{
+    Layout = null;
+    var cdt = DateTime.Now;
+    var ctmonnum = cdt.Month;
+    var ctyearnum = cdt.Year;
+
+    var pvmonnum = cdt.AddMonths(-1).Month;
+    var pvyearnum = cdt.AddMonths(-1).Year;
+
+    var mon = DateTime.Now.ToString("MMM-yyyy");
+    var mon1 = DateTime.Now.AddMonths(-1).ToString("MMM-yyyy");
+
+
+
+
+}
+
+<p>
+    &nbsp;
+</p>
+
+<div class="row" >
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="background: #536489;color: #fff;font-size: 20px;padding: 10px 15px !important;margin-bottom: 20px;">
+                <b>   Time Sheet </b>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                @using (Html.BeginForm("SaveDraft", "Supplier", FormMethod.Post, new { role = "form", id = "SaveDraftForm", Class = "SaveDraft" }))
+                {
+                    @Html.AntiForgeryToken()
+                    //@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.TEMasterID)
+                    @Html.HiddenFor(model => model.TimeEntryCode)
+                    @Html.HiddenFor(model => model.EmpID)
+                    @Html.HiddenFor(model => model.ManagerID)
+                    @Html.HiddenFor(model => model.Month)
+                    @Html.HiddenFor(model => model.Status)
+                   
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.Label("Timesheet Month", htmlAttributes: new { @class = "control-label" })
+                            <div>
+                                @Html.DropDownList("MonthYear", new SelectList(new List<Object>{
+                                        new { value = 0 , text = "Select"  },
+                                        new { value = 1 , text = mon  },
+                                        new { value = 2 , text = mon1  }
+
+
+                        }, "value", "text", 0), htmlAttributes: new { @class = "form-control", @onchange = "TEMonthChange(this.value)" })
+                                @Html.ValidationMessageFor(model => model.MonthYear, "", new { @class = "text-danger" })
+
+                                <div class="row">
+                                    <div>&nbsp;</div>
+                                </div>
+                                <div>
+                                    @Html.LabelFor(model => model.EmployeeName)
+                                    @ViewBag.FirstName
+                                </div>
+
+                            </div>
+                        </div>
+                        <div style="float:right;">
+                            <div class="col-md-10">
+                                @Html.LabelFor(model => model.Designation)
+                                @ViewBag.designation
+                            </div>
+                            <div class="col-md-10">
+                                @Html.LabelFor(model => model.ReportManager, htmlAttributes: new { @class = "control-label required" })
+                                @ViewBag.rep_manager
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div>&nbsp;</div>
+                    </div>
+
+                    <table class="table table-striped table-bordered" id="timesheetTable">
+                        <thead>
+                            <tr >
+
+                                <th style="background: #536489;color: #fff;font-size: 13px;padding: 10px 15px !important;margin-bottom: 20px;">
+                                    Project
+
+                                </th>
+                                @{
+
+                                    // var dates = new List<DateTime>();
+                                    var yearnum = 0;
+                                    var monnum = 0;
+
+
+                                    if (ViewBag.SelMonth == 0 || ViewBag.SelMonth == 1)
+                                    {
+                                        yearnum = ctyearnum;
+                                        monnum = ctmonnum;
+                                    }
+                                    if (ViewBag.SelMonth == 2)
+                                    {
+                                        yearnum = pvyearnum;
+                                        monnum = pvmonnum;
+                                    }
+
+                                    var NOD = 0;
+                                    // Loop from the first day of the month until we hit the next month, moving forward a day at a time
+                                    for (var date = new DateTime(yearnum, monnum, 1); date.Month == monnum; date = date.AddDays(1))
+                                    {
+                                        NOD++;
+                                        var shortDayName = date.DayOfWeek.ToString();
+                                        var dte = date.ToString("dd-MMM");
+                                        <th width="100" style="background: #536489;color: #fff;font-size: 13px;padding: 10px 15px !important;margin-bottom: 20px;">@dte (@shortDayName.Substring(0, 3))</th>
+                                    }
+                                }
+
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.tegridvm != null)
+                            {
+                                foreach (var item in Model.tegridvm)
+                                {
+                                    var pn = "ProjectName";
+                                    <tr>
+
+                                        <td>
+                                            @item.ProjectName
+                                        </td>
+
+
+                                        @{
+                                            var val = 0;
+                                            var ID = "";
+
+                                            ID = "Day_1_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day1 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day1 ?? default(int);
+                                                }
+                                                @*<input type="time" value="00:00" step="60" placeholder="hrs:mins" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />*@
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_2_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day2 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day2 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_3_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day3 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day3 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_4_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day4 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day4 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_5_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day5 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day5 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_6_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day6 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day6 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_7_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day7 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day7 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_8_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day8 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day8 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_9_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day9 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day9 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_10_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day10 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day10 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_11_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day11 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day11 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_12_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day12 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day12 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_13_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day13 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day13 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_14_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day14 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day14 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_15_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day15 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day15 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_16_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day16 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day16 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_17_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day17 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day17 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_18_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day18 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day18 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_19_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day19 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day19 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_20_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day20 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day20 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_21_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day21 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day21 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_22_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day22 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day22 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_23_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day23 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day23 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_24_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day24 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day24 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_25_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day25 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day25 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_26_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day26 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day26 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_27_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day27 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day27 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+                                            ID = "Day_28_" + item.ProjectID + "_" + item.TEGridID;
+                                            <td>
+                                                @if (item.Day28 == null)
+                                                {
+                                                    val = 0;
+                                                }
+                                                else
+                                                {
+                                                    val = item.Day28 ?? default(int);
+                                                }
+                                                <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                            </td>
+
+
+                                            if (NOD >= 29)
+                                            {
+                                                ID = "Day_29_" + item.ProjectID + "_" + item.TEGridID;
+                                                <td>
+                                                    @if (item.Day29 == null)
+                                                    {
+                                                        val = 0;
+                                                    }
+                                                    else
+                                                    {
+                                                        val = item.Day29 ?? default(int);
+                                                    }
+                                                    <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                                </td>
+                                            }
+
+                                            if (NOD >= 30)
+                                            {
+                                                ID = "Day_30_" + item.ProjectID + "_" + item.TEGridID;
+                                                <td>
+                                                    @if (item.Day30 == null)
+                                                    {
+                                                        val = 0;
+                                                    }
+                                                    else
+                                                    {
+                                                        val = item.Day30 ?? default(int);
+                                                    }
+                                                    <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                                </td>
+                                            }
+
+                                            if (NOD >= 31)
+                                            {
+                                                ID = "Day_31_" + item.ProjectID + "_" + item.TEGridID;
+                                                <td>
+                                                    @if (item.Day31 == null)
+                                                    {
+                                                        val = 0;
+                                                    }
+                                                    else
+                                                    {
+                                                        val = item.Day31 ?? default(int);
+                                                    }
+                                                    <input type="text" id="@ID" name="workHour" value="@val" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()" />
+                                                </td>
+                                            }
+                                            @*// var dates = new List<DateTime>();
+                                    var cnt = 0;
+                                    // Loop from the first day of the month until we hit the next month, moving forward a day at a time
+                                    for (var date = new DateTime(yearnum, monnum, 1); date.Month == monnum; date = date.AddDays(1))
+                                    {
+                                        cnt++;
+                                        var txtBoxId = "Day_" + @cnt + "_workHrTxt_" + item.ProjectID;
+                                        <td>
+                                            <input type="text" id="@txtBoxId" name="workHour" value="0" size="5" class="txtWorkHour" onkeypress="return fnAllowNumeric()"/>
+                                        </td>
+                                    }*@
+
+                                        }
+
+
+
+                                    </tr>
+                                }
+                            }
+
+
+                        </tbody>
+
+
+                    </table>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var actmon = "";
+    
+    $(function () {
+
+        $('#MonthYear').val(@ViewBag.SelMonth);
+
+    });
+
+    $('#timesheetTable').DataTable({
+        "pageLength": 100,
+        "autoWidth": true,
+        "scrollX": true,
+        "scrollY": "500px",
+        scrollCollapse: true,
+        dom: 'Bfrtipl',
+        fixedColumns:   {
+            leftColumns: 1,
+
+        },
+        "order": [],
+        //rowsGroup: [0, 1, 2, days, days - 1, days-2,days-3],
+        buttons: [
+            //'excelHtml5',
+            //'csvHtml5',
+            //'pdfHtml5',
+
+        ]
+    });
+
+    if(@ViewBag.SelMonth == 0)
+        actmon = '';
+
+ 
+    if ( @ViewBag.status==0) {
+        $('.dt-buttons').prepend('<a  onclick="SaveDraft()" class="dt-button buttons-copy buttons-html5" tabindex="0" aria-controls="productTable" href="#"><span>Save Draft</span></a>')
+
+        if (parseInt(@ViewBag.SelMonth) != 0) {
+            $('.dt-buttons').prepend('<a  onclick="Submit()" class="dt-button buttons-copy buttons-html5" tabindex="0" aria-controls="productTable" href="#"><span>Submit</span></a>')
+        }
+        $('.dt-button').addClass('btn btn-primary').removeClass('dt-button').css('margin-right', '5px')
+
+    }
+
+  
+    $('.txtWorkHour').change(function () {
+        var getchkid = $(this).attr('id');
+        var tid = getchkid.split('_')[1];
+        var nid = getchkid.split('_')[2];
+        var mid = "Day_"+tid+"_";
+        //var mid = "Day_";
+        var value = $('#' + getchkid).val();
+
+       
+        var totHr = 0;
+
+        $.each($("input[id^='"+mid+"']"), function (i, v) {
+            var myid = $(v).prop('id').split('_')[1];
+            var tbid = $(v).attr('id');
+            //alert($('#'+ tbid).val());
+            totHr=totHr + parseInt($('#'+ tbid).val());
+            });
+        //obj[0].DateDone = $(v).val();
+        if(totHr>8)
+        {
+            alert("Total hr shoud be 8");
+            return false;
+        }
+        //return false
+        });
+
+
+    function fnAllowNumeric() {
+        if ((event.keyCode < 48 || event.keyCode > 57) && event.keyCode != 8) {
+            event.keyCode = 0;
+            alert("Accept only Integer..!");
+            return false;
+        }
+
+    }
+
+    //Gathering Date Done
+
+
+</script>

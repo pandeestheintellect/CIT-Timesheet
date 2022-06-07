@@ -1,0 +1,435 @@
+﻿@model IEnumerable<Eng360Web.Models.ViewModel.TimeEntryMasterViewModel>
+
+@{
+    Layout = null;
+ 
+}
+<style>
+    .btncheck {
+        color: #1976d2;
+    }
+</style>
+
+<div class="row inner-page--container">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <b>Time Entry Report</b>
+            </div>
+            <!-- /.panel-heading -->
+
+
+            <div class="panel-body">
+
+                <div id="tabsClaim">
+                    <ul>
+                        <li><a href="#tabs-1">Pending Time Entries</a></li>
+                        <li><a href="#tabs-2">Approved Time Entries</a></li>
+                        <li><a href="#tabs-3">Rejected Time Entries</a></li>
+
+                    </ul>
+
+                    <div id="tabs-1">
+
+                        <table class="table table-striped table-bordered" id="claimTablePending">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Time Entry Code
+                                    </th>
+                                    <th>
+                                        Employee Name
+                                    </th>
+
+                                  
+                                    <th>
+                                        Month
+                                    </th>
+                                    <th>
+                                        Total Working Hours
+                                    </th>
+                                    <th>
+                                        Total Leave Hours
+                                    </th>
+
+                                    <th>Submitted On</th>
+
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    if (item.Status == 1)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TimeEntryCode)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.eng_employee_profile.FirstName) @Html.DisplayFor(modelItem => item.eng_employee_profile.LastName)
+                                            </td>
+
+                                            <td>
+                                                @{
+                                                    DateTime mont = Convert.ToDateTime(item.Month);
+                                                    var mon = mont.ToString("MMM-yyyy");
+
+                                                }
+                                                @mon
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TotalWorkingHour)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TotalLeaveHour)
+                                            </td>
+                                            <td>
+                                                @{
+                                                    var dt = Convert.ToString(item.SubmittedDate);
+                                                    var condt = DateTime.Parse(dt).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                                                }
+                                                @condt
+                                            </td>
+                                            <td>
+                                                @if (Eng360Web.Models.Utility.AppSession.GetCurrentUserGroup() == 2 && item.EmpID != @ViewBag.userid)
+                                                {
+
+                                                    <a class="btn" title="View TimeEntry" onclick="ViewTimeEntry(@item.TEMasterID)"> <i class="fa fa-eye action-search" aria-hidden="true"></i>   </a>
+                                                    <a class="btn" title=" To Approve" onclick="ApproveTimeEntry(@item.TEMasterID)"> <i class="fa fa-check action-check" aria-hidden="true"></i>   </a>
+                                                    <a class="btn" title="To Reject" onclick="RejectTimeEntry(@item.TEMasterID)"> <i class="fa fa-times action-times" aria-hidden="true"></i>   </a>
+
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn" title="View TimeEntry" onclick="ViewTimeEntry(@item.TEMasterID)"> <i class="fa fa-eye action-search" aria-hidden="true"></i>   </a>
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div id="tabs-2">
+
+                        <table class="table table-striped table-bordered" id="claimTableApproved">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Time Entry Code
+                                    </th>
+                                    <th>
+                                        Employee Name
+                                    </th>
+
+                                   
+                                    <th>
+                                        Month
+                                    </th>
+                                    <th>
+                                        Total Working Hours
+                                    </th>
+                                    <th>
+                                        Total Leave Hours
+                                    </th>
+
+                                    <th>
+                                        Approved on
+                                    </th>
+
+
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    if (item.Status == 2)
+                                    {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TimeEntryCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.eng_employee_profile.FirstName) @Html.DisplayFor(modelItem => item.eng_employee_profile.LastName)
+                                    </td>
+
+
+                                    <td>
+                                        @{
+                                            DateTime mont1 = Convert.ToDateTime(item.Month);
+                                            var mon1 = mont1.ToString("MMM-yyyy");
+
+                                        }
+                                        @mon1
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TotalWorkingHour)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TotalLeaveHour)
+                                    </td>
+
+                                    <td>
+                                        @{
+                                            var dt = Convert.ToString(item.ApprovalDate);
+                                            var condt = DateTime.Parse(dt).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                                        }
+                                        @condt
+                                    </td>
+                                    <td>
+
+                                        @if ((Eng360Web.Models.Utility.AppSession.GetCurrentUserGroup() == 2))
+                                        {
+                                            if ((item.EmpID == @ViewBag.userid))
+                                            {
+
+                                        <a class="btn" title="View TimeEntry" onclick="ViewTimeEntry(@item.TEMasterID)"> <i class="fa fa-eye action-search" aria-hidden="true"></i>   </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn" title="View TimeEntry" onclick="ViewTimeEntry(@item.TEMasterID)"> <i class="fa fa-eye action-search" aria-hidden="true"></i>   </a>
+                                                <a class="btn" title="To Reject" onclick="RejectTimeEntry(@item.TEMasterID)"> <i class="fa fa-times action-times" aria-hidden="true"></i>   </a>
+                                            }
+                                        }
+                                        else
+                                        {
+                                                <a class="btn" title="View TimeEntry" onclick="ViewTimeEntry(@item.TEMasterID)"> <i class="fa fa-eye action-search" aria-hidden="true"></i>   </a>
+
+                                        }
+
+                                    </td>
+
+                                  
+                                </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div id="tabs-3">
+
+                        <table class="table table-striped table-bordered" id="claimTableRejected">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Time Entry Code
+                                    </th>
+                                    <th>
+                                        Employee Name
+                                    </th>
+
+
+                                    <th>
+                                        Month
+                                    </th>
+                                    <th>
+                                        Total Working Hours
+                                    </th>
+                                    <th>
+                                        Total Leave Hours
+                                    </th>
+                                    <th>
+                                        Submitted On
+                                    </th>
+                                    <th>
+                                        Rejected on
+                                    </th>
+                                    <th>
+                                        Remarks
+                                    </th>
+
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    if (item.Status == 3)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TimeEntryCode)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.eng_employee_profile.FirstName) @Html.DisplayFor(modelItem => item.eng_employee_profile.LastName)
+                                            </td>
+
+                                           
+
+                                            <td>
+                                                @{
+                                                    DateTime mont2 = Convert.ToDateTime(item.Month);
+                                                    var mon2 = mont2.ToString("MMM-yyyy");
+
+                                                }
+                                                @mon2
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TotalWorkingHour)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TotalLeaveHour)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.SubmittedDate)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RejectedDate)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RejectedRemarks)
+                                            </td>
+
+                                            <td>
+
+                                                @if ((Eng360Web.Models.Utility.AppSession.GetCurrentUserGroup() == 2))
+                                                {
+                                                    if ((item.EmpID == @ViewBag.userid))
+                                                    {
+
+                                                        <a class="btn" title="Edit TimeEntry" onclick="EditTimeEntry(@item.TEMasterID)"> <i class="fa fa-pencil action-pencil" aria-hidden="true"></i>   </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a class="btn" title="View TimeEntry" onclick="ViewTimeEntry(@item.TEMasterID)"> <i class="fa fa-eye action-search" aria-hidden="true"></i>   </a>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn" title="Edit TimeEntry" onclick="EditTimeEntry(@item.TEMasterID)"> <i class="fa fa-pencil action-pencil" aria-hidden="true"></i>   </a>
+
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $("#tabsClaim").tabs();
+    });
+
+    $(document).ready(function () {
+
+        $('#claimTablePending').DataTable({
+            dom: 'Bfrtipl',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="fa fa-file-text-o"></i>',
+                    titleAttr: 'CSV'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="fa fa-file-pdf-o"></i>',
+                    titleAttr: 'PDF'
+                }
+
+            ]
+        });
+    });
+   
+    $('#claimTablePending_wrapper .dt-button').addClass('btn btn-primary').removeClass('dt-button')
+
+
+    $(document).ready(function () {
+
+        $('#claimTableApproved').DataTable({
+            "autoWidth": true,
+            //"scrollX": true,
+            dom: 'Bfrtipl',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="fa fa-file-text-o"></i>',
+                    titleAttr: 'CSV'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="fa fa-file-pdf-o"></i>',
+                    titleAttr: 'PDF'
+                }
+
+            ]
+        });
+    });
+
+    $('#claimTableApproved_wrapper .dt-button').addClass('btn btn-primary').removeClass('dt-button')
+
+    $(document).ready(function () {
+
+        $('#claimTableRejected').DataTable({
+            dom: 'Bfrtipl',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy'
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="fa fa-file-text-o"></i>',
+                    titleAttr: 'CSV'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="fa fa-file-pdf-o"></i>',
+                    titleAttr: 'PDF'
+                }
+
+            ]
+        });
+    });
+
+    $('#claimTableRejected_wrapper .dt-button').addClass('btn btn-primary').removeClass('dt-button')
+
+
+</script>

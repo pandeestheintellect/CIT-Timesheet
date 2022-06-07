@@ -1,0 +1,110 @@
+﻿@model Eng360Web.Models.ViewModel.HolidayMasterViewModel
+
+    @{
+        Layout = null;
+    }
+
+<div class="inner-page--container view">
+
+    <div class="modal-footer">
+        @*<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>*@
+        <input type="button" value="Back" id="create-hliday-dialog-save" class="btn btn-primary Holiday" />
+
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Holiday Settings Details
+        </div>
+
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="modal-body">
+
+                <table class="table table-bordered">
+                    <tr>
+                        <th bgcolor="beige" class="col-md-7">@Html.LabelFor(model => model.HolidayCode) </th>
+                        <th bgcolor="beige" class="col-md-7">@Html.DisplayNameFor(model => model.Description) </th>
+
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.HolidayCode)</td>
+                        <td>@Html.DisplayFor(model => model.Description)</td>
+
+                    </tr>
+                    <tr>
+                        <th bgcolor="beige" class="col-md-7">@Html.LabelFor(model => model.Date) </th>
+                        <th bgcolor="beige" class="col-md-7">@Html.DisplayNameFor(model => model.Country) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @{
+                            var dt = Convert.ToDateTime(Model.Date).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.Date != null)
+                            {
+                            @dt
+                            }
+                        </td>
+                        <td>@Html.DisplayFor(model => model.countryMaster.name)</td>
+
+                    </tr>
+
+
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.CreatedDate) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.CreatedBy) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @{
+                            var crdt = Convert.ToDateTime(Model.CreatedDate).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.CreatedDate != null)
+                            {
+                            @crdt
+                            }
+                        </td>
+                        <td>@Html.DisplayFor(model => model.eng_employee_profile.FullName)</td>
+
+                    </tr>
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.UpdatedBy) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.UpdatedDate) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.eng_employee_profile1.FullName)</td>
+                        <td>
+                            @{
+                            var updt = Convert.ToDateTime(Model.UpdatedDate).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.UpdatedDate != null)
+                            {
+                            @updt
+                            }
+                        </td>
+
+                    </tr>
+
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        @*<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>*@
+        <input type="button" value="Back" id="create-hliday-dialog-save" class="btn btn-primary Holiday" />
+
+    </div>
+
+  </div>

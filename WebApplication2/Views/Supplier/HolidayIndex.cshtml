@@ -1,0 +1,144 @@
+﻿@model IEnumerable<Eng360Web.Models.ViewModel.HolidayMasterViewModel>
+
+<link href="~/Scripts/lobipanel-master/dist/css/lobipanel.min.css" rel="stylesheet" />
+
+@{
+    Layout = null;
+}
+
+
+
+<div class="row inner-page--container">
+    <div class="col-lg-12">
+        <div class="panel panel-default" id="testpanel">
+            <div class="panel-heading">
+                <b>  Holiday Details</b>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <table class="table table-striped table-bordered" id="holidayTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.HolidayCode)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Description)
+
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Date)
+
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Day)
+
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Country)
+
+                            </th>
+
+
+
+
+
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.HolidayCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                               
+                            </td>
+
+                            <td>
+                                @{
+                                var dt = Convert.ToString(item.Date);
+                                var condt = DateTime.Parse(dt).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                                }
+                                @condt
+
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Day)
+
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.countryMaster.name)
+
+
+                            </td>
+                            <td>
+
+                                <a class="btn" title="Edit Holiday" onclick="EditHoliday(@item.HolidayId)"> <i class="fa fa-pencil action-pencil" aria-hidden="true"></i>   </a>
+                                <a class="btn" title="View Holiday Details" onclick="ViewHoliday(@item.HolidayId)"> <i class="fa fa-eye action-search" aria-hidden="true"></i> </a>
+                                <a class="btn" title="Delete Holiday" onclick="DeleteHoliday(@item.HolidayId)"> <i class="fa fa-trash action-trash" aria-hidden="true"></i> </a>
+
+
+                            </td>
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/lobipanel-master/dist/js/lobipanel.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#holidayTable').DataTable({
+            "autoWidth": true,
+            //"scrollX": true,
+            dom: 'Bfrtipl',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    text: '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy'
+                },
+
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="fa fa-file-text-o"></i>',
+                    titleAttr: 'CSV'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="fa fa-file-pdf-o"></i>',
+                    titleAttr: 'PDF'
+                }
+
+            ]
+        });
+    });
+    $('.dt-buttons').prepend('<a  onclick="CreateHoliday()" class="dt-button buttons-create buttons-html5" tabindex="0" aria-controls="holidayTable" href="#" title="Create"><i class="fa fa-plus"></i></a>')
+    $('.dt-button').addClass('btn btn-primary').removeClass('dt-button')
+
+    $(function () {
+        $('#testpanel, #testpanel1').lobiPanel({
+            //Options go here
+            reload: false,
+            close: false,
+            editTitle: false
+
+        });
+    });
+</script>

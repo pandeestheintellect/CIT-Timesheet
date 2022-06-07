@@ -1,0 +1,196 @@
+﻿@model Eng360Web.Models.ViewModel.EmployeeViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="inner-page--container view">
+    <div class="modal-footer">
+        @*<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>*@
+        <input type="button" value="Back" id="create-employee-dialog-save" class="btn btn-primary Employee" />
+
+    </div>
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Employee Details
+
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="modal-body">
+
+
+
+                
+
+
+                <table class="table table-bordered">
+                    <tr>
+
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.EmpID) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.FirstName) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.LastName) </th>
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.EmpID)</td>
+                        <td>@Html.DisplayFor(model => model.FirstName)</td>
+                        <td>@Html.DisplayFor(model => model.LastName)</td>
+                    </tr>
+
+                    <tr>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.Nationality) </th>
+
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.DoB) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.Gender) </th>
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.Nationality)</td>
+
+                        <td>
+                            @{
+                                var dt = "";
+                                dt = Convert.ToDateTime(Model.DoB).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.DoB != null)
+                            {
+                                @dt
+                            }
+                        </td>
+                        <td>@Html.DisplayFor(model => model.Gender)</td>
+                    </tr>
+
+                    <tr>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.Designation) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.DoJ) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.GroupID) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.Designation)</td>
+                        <td>
+                            @{
+                                dt = Convert.ToDateTime(Model.DoJ).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.DoJ != null)
+                            {
+                                @dt
+                            }
+
+                        </td>
+                        <td>@ViewBag.JobGroup</td>
+
+                    </tr>
+                    <tr>
+
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.ReportManager) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.eng_address_master.Email) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.eng_address_master.Mobile) </th>
+                    </tr>
+
+                    <tr>
+
+                        <td>@Html.DisplayFor(model => model.ReportManager)</td>
+                        <td>@Html.DisplayFor(model => model.eng_address_master.Email)</td>
+                        <td>@Html.DisplayFor(model => model.eng_address_master.Mobile)</td>
+                    </tr>
+
+
+
+
+                    <tr>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.eng_address_master.Tel) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.eng_address_master.Web) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.eng_address_master.Address1) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.eng_address_master.Tel)</td>
+                        <td>@Html.DisplayFor(model => model.eng_address_master.Web)</td>
+                        <td>@Html.DisplayFor(model => model.eng_address_master.Address1)</td>
+
+                    </tr>
+
+                    <tr>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.eng_address_master.Address2) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.eng_address_master.City) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.eng_address_master.Country) </th>
+
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.eng_address_master.Address2)</td>
+                        <td>@Html.DisplayFor(model => model.eng_address_master.City)</td>
+                        <td>@ViewBag.Country</td>
+
+
+                    </tr>
+
+                    <tr>
+
+
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.eng_address_master.Postal_Code) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.Passport_Number) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.Passport_Valid_Till) </th>
+                    </tr>
+
+                    <tr>
+
+
+                        <td>@Html.DisplayFor(model => model.eng_address_master.Postal_Code)</td>
+                        <td>@Html.DisplayFor(model => model.Passport_Number)</td>
+                        <td>
+                            @{
+                                dt = Convert.ToDateTime(Model.Passport_Valid_Till).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.Passport_Valid_Till != null)
+                            {
+                                @dt
+                            }
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.Salary) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.eng_address_master.Fax1) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.eng_address_master.SkypeID) </th>
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.Salary)</td>
+                        <td>@Html.DisplayFor(model => model.eng_address_master.Fax1)</td>
+                        <td>@Html.DisplayFor(model => model.eng_address_master.SkypeID)</td>
+                    </tr>
+                    <tr>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.eng_address_master.Remarks) </th>
+                      
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.eng_address_master.Remarks)</td>
+                        
+                    </tr>
+
+
+
+
+
+                </table>
+
+
+
+</div>
+</div>
+</div>
+<div class="modal-footer">
+    @*<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>*@
+    <input type="button" value="Back" id="create-employee-dialog-save" class="btn btn-primary Employee" />
+
+</div>
+</div>

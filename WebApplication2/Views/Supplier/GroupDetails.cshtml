@@ -1,0 +1,90 @@
+﻿@model Eng360Web.Models.ViewModel.GroupViewModel
+
+    @{
+        Layout = null;
+    }
+
+<div class="inner-page--container view">
+
+    <div class="modal-footer">
+        @*<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>*@
+        <input type="button" value="Back" id="create-rle-dialog-save" class="btn btn-primary UserGroup" />
+
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            User Group Details
+        </div>
+
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="modal-body">
+
+                <table class="table table-bordered">
+                    <tr>
+                        <th bgcolor="beige" class="col-md-7">@Html.LabelFor(model => model.GroupName) </th>
+                        <th bgcolor="beige" class="col-md-7">@Html.DisplayNameFor(model => model.Remarks) </th>
+
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.GroupName)</td>
+                        <td>@Html.DisplayFor(model => model.Remarks)</td>
+
+                    </tr>
+
+
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.CreatedDate) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model =>  model.CreatedBy) </th>
+                       
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @{
+                            var crdt = Convert.ToDateTime(Model.CreatedDate).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.CreatedDate != null)
+                            {
+                            @crdt
+                            }
+                        </td>
+                        <td>@Html.DisplayFor(model => model.CreatedByName)</td>
+                       
+                    </tr>
+                    <tr>
+                        <th bgcolor="beige">@Html.LabelFor(model => model.UpdatedBy) </th>
+                        <th bgcolor="beige">@Html.DisplayNameFor(model => model.UpdatedDate) </th>
+                       
+                    </tr>
+
+                    <tr>
+                        <td>@Html.DisplayFor(model => model.UpdatedByName)</td>
+                        <td>
+                            @{
+                            var updt = Convert.ToDateTime(Model.UpdatedDate).ToString(Eng360Web.Models.Utility.AppSettings.GetDateFormat());
+                            }
+                            @if (Model.UpdatedDate != null)
+                            {
+                            @updt
+                            }
+                        </td>
+
+                    </tr>
+
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        @*<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>*@
+        <input type="button" value="Back" id="create-rle-dialog-save" class="btn btn-primary UserGroup" />
+
+    </div>
+
+  </div>

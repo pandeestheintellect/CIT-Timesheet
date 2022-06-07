@@ -1,0 +1,101 @@
+﻿@model Eng360Web.Models.ViewModel.HolidayMasterViewModel
+
+@{
+    Layout = null;
+}
+<style>
+    .required::after {
+        content: "*";
+        font-weight: bold;
+        color: red;
+    }
+</style>
+<script src="~/Scripts/moment.js"></script>
+
+<link href="~/Content/jquery.steps.css" rel="stylesheet" />
+
+<script src="~/Scripts/jquery.steps.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.js"></script>
+<link href="~/Content/bootstrap-datetimepicker.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <b> Edit Holiday </b>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="modal-body">
+                    @using (Html.BeginForm("HolidayEdit", "Supplier", FormMethod.Post, new { role = "form", id = "holidayForm" }))
+                    {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.HolidayId)
+                    @Html.HiddenFor(model => model.HolidayCode)
+                    @Html.HiddenFor(model => model.IsActive)
+                    @Html.HiddenFor(model => model.CreatedDate)
+                    @Html.HiddenFor(model => model.CreatedBy)
+
+
+                    <div class="row">
+
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label required" })
+                            <div>
+                                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label required" })
+                            <div class="inner-addon right-addon">
+                                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+                                <i class="glyphicon glyphicon-calendar"></i>
+
+                                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label " })
+                            <div>
+                                @Html.DropDownList("Country", null, htmlAttributes: new { @class = "form-control", @onchange = "onclientChange(this)" })
+                                @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+
+                            </div>
+                        </div>
+                        
+
+
+
+
+
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+
+                        <button type="button" id="create-holiday-dialog-Edit" class="btn btn-primary">Save</button>
+
+                    </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#Date').datetimepicker({ format: 'DD/MM/YYYY' });
+
+    $("form").removeData("validator");
+    $("form").removeData("unobtrusiveValidation");
+    $.validator.unobtrusive.parse("form");
+</script>

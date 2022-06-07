@@ -1,0 +1,139 @@
+﻿@model IEnumerable<Eng360Web.Models.ViewModel.LeaveMasViewModel>
+
+
+<link href="~/Scripts/lobipanel-master/dist/css/lobipanel.min.css" rel="stylesheet" />
+
+@{
+    Layout = null;
+}
+
+
+
+<div class="row inner-page--container">
+    <div class="col-lg-12">
+        <div class="panel panel-default" id="testpanel">
+            <div class="panel-heading">
+                <b> Leave Details</b>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <table class="table table-striped table-bordered" id="leaveMasTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.LeaveMasCode)
+                            </th>
+                            <th>
+                                Leave Type
+                            </th>
+
+                           
+                            <th>
+                                @Html.DisplayNameFor(model => model.FromDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.ToDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.NoOfDays)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.RemainingLeaves)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.LeaveReason)
+                            </th>
+
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LeaveMasCode)
+                            </td>
+                           
+
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.eng_leave_settings.LeaveName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FromDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ToDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NoOfDays)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RemainingLeaves)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LeaveReason)
+                            </td>
+
+                            <td>
+
+
+                                <a class="btn" title="Edit Role" onclick="EditProject(@item.LeaveMasId)"> <i class="fa fa-pencil action-pencil" aria-hidden="true"></i>   </a>
+                                <a class="btn" title="View Role Details" onclick="ViewProject(@item.LeaveMasId)"> <i class="fa fa-search action-search" aria-hidden="true"></i> </a>
+                                <a class="btn" onclick="DeleteProject(@item.LeaveMasId)"> <i class="fa fa-trash action-trash" aria-hidden="true"></i> </a>
+
+
+                            </td>
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/lobipanel-master/dist/js/lobipanel.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#leaveMasTable').DataTable({
+            "autoWidth": true,
+            //"scrollX": true,
+            dom: 'Bfrtipl',
+            buttons: [
+
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="fa fa-file-text-o"></i>',
+                    titleAttr: 'CSV'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="fa fa-file-pdf-o"></i>',
+                    titleAttr: 'PDF'
+                }
+
+            ]
+        });
+    });
+    $('.dt-buttons').prepend('<a  onclick="LeaveMasCreate()" class="dt-button buttons-create buttons-html5" tabindex="0" aria-controls="leaveMasTable" href="#" title="Create"><i class="fa fa-plus"></i></a>')
+    $('.dt-button').addClass('btn btn-primary').removeClass('dt-button')
+
+    $(function () {
+        $('#testpanel, #testpanel1').lobiPanel({
+            //Options go here
+            reload: false,
+            close: false,
+            editTitle: false
+
+        });
+    });
+</script>
